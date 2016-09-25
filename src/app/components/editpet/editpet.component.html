@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>Pet Details</h2>
+  <div>
+    <form>
+      <div class="form-group">
+        <label>Title</label>
+        <input [(ngModel)]="pet.title" type="text" class="form-control" name="title">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input [(ngModel)]="pet.description" type="text" class="form-control" name="description">
+      </div>
+      <div class="form-group">
+        <label>Price</label>
+        <div class="input-group">
+          <div class="input-group-addon">$</div>
+          <input [(ngModel)]="pet.purchasePrice" type="text" class="form-control" name="price">
+          <div class="input-group-addon">.00</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Pet Type</label>
+        <select class="form-control" [(ngModel)]="pet.petType" name="petType">
+          <option *ngFor="let p of petTypes" [value]="p">{{p}}</option>
+        </select>
+      </div>
+      <button (click)="save()" type="submit" class="btn btn-primary">Save</button>
+      <button *ngIf="!isCreate" (click)="delete()" type="submit" class="btn btn-default">Delete</button>
+      <button (click)="goBack()" type="submit" class="btn btn-default">Back</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 sidebar">
+      <h4>Criteria</h4>
+      <form>
+        <fieldset>
+          <div class="form-group">
+            <label>Pet Type</label>
+            <select class="form-control" [(ngModel)]="petType" name="petType">
+              <option *ngFor="let p of petTypes" [value]="p">{{p}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Keyword</label>
+            <input type="text" class="form-control"  [(ngModel)]="keyword" name="keyword"/>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="search()">Search</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="col-md-9 results">
+      <h4>Search Results</h4>
+      <div *ngIf="pets && pets.length == 0">
+        0 records found
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-4" *ngFor="let pet of pets" [class.selected]="pet === selectedPet">
+          <div class="thumbnail">
+            <img class="media-object" src="{{pet.photoUrl}}">
+            <div class="caption">
+              <span class="pull-right"><span class="badge btn-success">${{pet.purchasePrice}}</span></span>
+              <h4>{{pet.title}}</h4>
+              <p>{{pet.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

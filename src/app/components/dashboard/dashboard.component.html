@@ -1,0 +1,17 @@
+<img src="assets/banner.jpg" width="100%" height="150px"/>
+<div class="container">
+  <h1>Newest Pets</h1>
+  <hr/>
+  <div class="row">
+    <div class="col-sm-6 col-md-4" *ngFor="let pet of pets" [class.selected]="pet === selectedPet">
+      <div class="thumbnail">
+        <img class="media-object" src="{{pet.photoUrl}}">
+        <div class="caption">
+          <span class="pull-right"><span class="badge btn-success">${{pet.purchasePrice}}</span></span>
+          <h4>{{pet.title}}</h4>
+          <p>{{pet.description}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
