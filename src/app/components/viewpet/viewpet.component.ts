@@ -20,7 +20,7 @@ export class ViewPetComponent implements OnInit {
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
       this.petService.findOne(id)
-        .then(hero => this.pet = hero).catch(() => {});
+        .then(pet => this.pet = pet).catch(() => {});
     });
   }
 

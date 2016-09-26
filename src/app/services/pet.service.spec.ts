@@ -1,8 +1,7 @@
-import {TestBed, getTestBed, async} from '@angular/core/testing';
+import {TestBed, getTestBed} from "@angular/core/testing";
 import {HttpModule, XHRBackend, ResponseOptions, Response} from "@angular/http";
 import {MockBackend, MockConnection} from "@angular/http/testing";
 import {CookieService} from "angular2-cookie/core";
-
 import {PetService} from "./pet.service";
 import {PETS} from "../mocks/mock-pets";
 import {AuthService} from "./auth.service";
@@ -35,12 +34,7 @@ describe('Pet Service', () => {
   });
 
   it('should find all pets', done => {
-    backend.connections.subscribe(
-      (connection: MockConnection) => {
-        connection.mockRespond(new Response(
-          new ResponseOptions({body: PETS}
-          )));
-      });
+    setHttpReturnValue(backend, PETS);
     petService
       .findMany()
       .then((response) => {
@@ -50,12 +44,7 @@ describe('Pet Service', () => {
   });
 
   it('should find one pet', done => {
-    backend.connections.subscribe(
-      (connection: MockConnection) => {
-        connection.mockRespond(new Response(
-          new ResponseOptions({body: PETS[0]}
-          )));
-      });
+    setHttpReturnValue(backend, PETS[0]);
     petService
       .findOne(1)
       .then((response) => {
@@ -67,12 +56,7 @@ describe('Pet Service', () => {
   it('should update a pet', done => {
     var pet = new Pet();
     pet.id = 1;
-    backend.connections.subscribe(
-      (connection: MockConnection) => {
-        connection.mockRespond(new Response(
-          new ResponseOptions({body: JSON.stringify(pet)}
-          )));
-      });
+    setHttpReturnValue(backend, pet);
     petService
       .update(pet)
       .then((response) => {
@@ -81,5 +65,43 @@ describe('Pet Service', () => {
       });
   });
 
+  it('should create a pet', done => {
+    var pet = new Pet();
+    pet.id = 1;
+    setHttpReturnValue(backend, pet);
+    petService
+      .create(pet)
+      .then((response) => {
+        expect(response).toEqual(pet);
+        done();
+      });
+  });
+
+  it('should delete a pet', done => {
+    setHttpReturnValue(backend, '');
+    petService
+      .delete(1)
+      .then(() => {
+        done();
+      });
+  });
+
+  it('should search for pets', done => {
+    setHttpReturnValue(backend, PETS);
+    petService
+      .search('joeyis', 'cool')
+      .then(() => {
+        done();
+      });
+  });
+
+  function setHttpReturnValue(backend, body) {
+    backend.connections.subscribe(
+      (connection: MockConnection) => {
+        connection.mockRespond(new Response(
+          new ResponseOptions({body: body}
+          )));
+      });
+  }
 });
 

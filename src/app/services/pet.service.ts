@@ -5,14 +5,20 @@ import {Pet} from "../models/pet";
 import {environment} from '../environment.ts';
 import {AuthService} from "./auth.service";
 
+/**
+ * Hello everyone! I am the Pet Service. Use me when you want to make pet related calls to the server.
+ */
 @Injectable()
 export class PetService {
   private petsUrl = environment.apiUrl + "/pets";
-  private headers: Headers;
 
   constructor(private http: Http, private authService: AuthService) {
   }
 
+  /**
+   * Find all pets. No pagination yet!
+   * @returns {Promise<any>|Promise<T>}
+   */
   findMany(): Promise<Pet[]> {
     return this.http.get(this.petsUrl)
       .toPromise()
@@ -20,6 +26,11 @@ export class PetService {
       .catch(this.handleError);
   }
 
+  /**
+   * Finds a single pet based on the id
+   * @param id
+   * @returns {Promise<any>|Promise<T>}
+   */
   findOne(id: number): Promise<Pet> {
     return this.http.get(`${this.petsUrl}/${id}`)
       .toPromise()
@@ -27,6 +38,11 @@ export class PetService {
       .catch(this.handleError);
   }
 
+  /**
+   * Updates a pet
+   * @param pet
+   * @returns {Promise<any>|Promise<T>}
+   */
   update(pet: Pet): Promise<Pet> {
     return this.http
       .put(this.petsUrl, JSON.stringify(pet), {headers: this.getHeaders()})
@@ -35,6 +51,11 @@ export class PetService {
       .catch(this.handleError);
   }
 
+  /**
+   * Creates a new pet
+   * @param pet
+   * @returns {Promise<any>|Promise<T>}
+   */
   create(pet: Pet): Promise<Pet> {
     return this.http
       .post(this.petsUrl, JSON.stringify(pet), {headers: this.getHeaders()})
@@ -43,6 +64,11 @@ export class PetService {
       .catch(this.handleError);
   }
 
+  /**
+   * Deletes an existing pet
+   * @param id
+   * @returns {Promise<any>|Promise<T>}
+   */
   delete(id: number): Promise<void> {
     return this.http.delete(`${this.petsUrl}/${id}`, {headers: this.getHeaders()})
       .toPromise()
@@ -50,6 +76,12 @@ export class PetService {
       .catch(this.handleError);
   }
 
+  /**
+   * Search for pets based on some parameters
+   * @param keyword
+   * @param petType
+   * @returns {Promise<any>|Promise<T>}
+   */
   search(keyword: string, petType: string): Promise<Pet[]> {
     return this.http.get(`${this.petsUrl}/?keyword=${keyword}&petType=${petType}`)
       .toPromise()
