@@ -21,9 +21,8 @@ export class AuthService {
       .toPromise()
       .then(response => {
         if(response.status === 200) {
-          // Grab token from header
-          var headers = response.headers;
-          this.token = headers.get('Authorization').replace('Bearer ', '');
+          // Grab token
+          this.token = response.text().replace('Bearer ', '');
           console.log('found token ' + this.token);
 
           // Fetch the role after we have logged in

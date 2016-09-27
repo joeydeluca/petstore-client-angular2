@@ -30,6 +30,10 @@ export class EditPetComponent implements OnInit {
     });
   }
 
+  submitted = false;
+  onSubmit() { this.submitted = true; }
+  active = true;
+
   save(): void {
     if(this.isCreate) {
       this.petService.create(this.pet)

@@ -1,7 +1,7 @@
 <div class="container">
   <h2>Pet Details</h2>
   <div>
-    <form>
+    <form *ngIf="active" (ngSubmit)="onSubmit()" #heroForm="ngForm">
       <div class="form-group">
         <label>Title</label>
         <input [(ngModel)]="pet.title" type="text" class="form-control" name="title">

@@ -17,7 +17,7 @@ export class ViewPetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.forEach((params: Params) => {
+    this.route.params.subscribe((params: Params) => {
       let id = +params['id'];
       this.petService.findOne(id)
         .then(pet => this.pet = pet).catch(() => {});
