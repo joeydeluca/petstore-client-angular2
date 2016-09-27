@@ -1,20 +1,20 @@
 <div class="container">
   <h2>Pet Details</h2>
   <div>
-    <form *ngIf="active" (ngSubmit)="onSubmit()" #heroForm="ngForm">
+    <form (ngSubmit)="save()" #petForm="ngForm">
       <div class="form-group">
         <label>Title</label>
-        <input [(ngModel)]="pet.title" type="text" class="form-control" name="title">
+        <input required [(ngModel)]="pet.title" type="text" class="form-control" name="title">
       </div>
       <div class="form-group">
         <label>Description</label>
-        <input [(ngModel)]="pet.description" type="text" class="form-control" name="description">
+        <input required [(ngModel)]="pet.description" type="text" class="form-control" name="description">
       </div>
       <div class="form-group">
         <label>Price</label>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <input [(ngModel)]="pet.purchasePrice" type="text" class="form-control" name="price">
+          <input required [(ngModel)]="pet.purchasePrice" type="text" class="form-control" name="price">
           <div class="input-group-addon">.00</div>
         </div>
       </div>
@@ -24,9 +24,17 @@
           <option *ngFor="let p of petTypes" [value]="p">{{p}}</option>
         </select>
       </div>
-      <button (click)="save()" type="submit" class="btn btn-primary">Save</button>
-      <button *ngIf="!isCreate" (click)="delete()" type="submit" class="btn btn-default">Delete</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!petForm.form.valid">Save</button>
+      <button *ngIf="!isCreate" (click)="delete()" type="button" class="btn btn-default">Delete</button>
       <button (click)="goBack()" type="submit" class="btn btn-default">Back</button>
+      <hr/>
+      <div *ngIf="errors && errors.length > 0" class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span>Error:</span>
+        <div *ngFor='let error of errors'>
+        - {{error}}
+        </div>
+      </div>
     </form>
   </div>
 </div>

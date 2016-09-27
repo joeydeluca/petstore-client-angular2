@@ -11,6 +11,7 @@ export class EditPetComponent implements OnInit {
   pet = new Pet();
   petTypes: string[] = ['DOG', 'CAT'];
   isCreate = true;
+  errors = Array();
 
   constructor(
     private petService: PetService,
@@ -30,22 +31,27 @@ export class EditPetComponent implements OnInit {
     });
   }
 
-  submitted = false;
-  onSubmit() { this.submitted = true; }
-  active = true;
-
   save(): void {
+    if(isNaN(this.pet.purchasePrice)) {
+      this.pet.purchasePrice = 0;
+    }
+
     if(this.isCreate) {
       this.petService.create(this.pet)
         .then(this.goBack)
-        .catch(() => {
+        .catch((res) => {
+          if(res && res.details) {
+            this.errors = res.details;
+          }
         });
     } else {
       this.petService.update(this.pet)
         .then(this.goBack)
-        .catch(() => {
+        .catch((res) => {
+          if(res && res.details) {
+            this.errors = res.details;
+          }
         });
-
     }
   }
 

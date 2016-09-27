@@ -90,7 +90,9 @@ export class PetService {
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
+    if(error.status == 412) {
+      return Promise.reject(JSON.parse(error._body));
+    }
     return Promise.reject(error.message || error);
   }
 
