@@ -9,7 +9,7 @@ import {environment} from "../environment.ts";
 export class AuthService {
   private url = environment.apiUrl;
   private headers = new Headers({'Content-Type': 'application/json'});
-  private cookieKey = "PetsKey";
+  private tokenKey = "PetsKey";
   private token: string;
   private role: string;
 
@@ -20,50 +20,47 @@ export class AuthService {
       .post(`${this.url}/login`, JSON.stringify(userLogin), {headers: this.headers})
       .toPromise()
       .then(response => {
-        if(response.status === 200) {
-          // Grab token
-          this.token = response.text().replace('Bearer ', '');
-          console.log('found token ' + this.token);
-
-          // Fetch the role after we have logged in
-          return this.getRoleFromServer(this.token)
-            .then(r => {
-              this.role = r
-              this.saveAuthDataToCookie();
-              return true;
-            })
-            .catch(() => {})
-        } else {
+        if(response.status !== 200) {
           return false;
         }
+
+        var responseDto = response.json();
+        console.debug('auth response ' + JSON.stringify(responseDto));
+
+        this.token = responseDto.token;
+
+        this.role = responseDto.role;
+        this.saveAuthDataToCookie();
+
+        return true;
       })
       .catch(this.handleError);
   }
 
   public isAuthenticated(): boolean {
-    var authData = this.cookieService.getObject(this.cookieKey) as AuthData;
-    return authData && authData.token ? true : false;
+    var item = localStorage.getItem(this.tokenKey);
+    return item ? true : false;
   }
 
   public isAdmin(): boolean {
-    var authData = this.cookieService.getObject(this.cookieKey) as AuthData;
-    return authData && authData.role && authData.role === 'ROLE_ADMIN';
+    var item = localStorage.getItem(this.tokenKey);
+    if(item) {
+      var authData = JSON.parse(item) as AuthData;
+      return authData && authData.role && authData.role === 'ROLE_ADMIN';
+    }
+    return false;
   }
 
   public getToken(): string {
-    var authData = this.cookieService.getObject(this.cookieKey) as AuthData;
-    return authData ? authData.token : '';
+    var item = localStorage.getItem(this.tokenKey);
+    if(item) {
+      return JSON.parse(item).token;
+    }
+    return '';
   }
 
   public logout(): void {
-    this.cookieService.removeAll();
-  }
-
-  private getRoleFromServer(token: string): Promise<string> {
-    return this.http.get(`${this.url}/users/role`, {headers: new Headers({'Authorization': token})})
-      .toPromise()
-      .then(response => response.text())
-      .catch(this.handleError);
+    localStorage.removeItem(this.tokenKey);
   }
 
   private handleError(error: any): Promise<any> {
@@ -72,7 +69,7 @@ export class AuthService {
   }
 
   private saveAuthDataToCookie(): void {
-    this.cookieService.putObject(this.cookieKey, new AuthData(this.token, this.role))
+    localStorage.setItem(this.tokenKey, JSON.stringify(new AuthData(this.token, this.role)));
   }
 
 }

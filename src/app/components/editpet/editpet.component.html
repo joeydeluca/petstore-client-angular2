@@ -26,7 +26,7 @@
       </div>
       <button type="submit" class="btn btn-primary" [disabled]="!petForm.form.valid">Save</button>
       <button *ngIf="!isCreate" (click)="delete()" type="button" class="btn btn-default">Delete</button>
-      <button (click)="goBack()" type="submit" class="btn btn-default">Back</button>
+      <button (click)="goBack()" type="button" class="btn btn-default">Back</button>
       <hr/>
       <div *ngIf="errors && errors.length > 0" class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>

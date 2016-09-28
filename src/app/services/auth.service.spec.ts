@@ -29,25 +29,5 @@ describe('Auth Service', () => {
     expect(authService).toBeDefined();
   });
 
-/*  it('should login', done => {
-
-    backend.connections.subscribe(connection => {
-
-      if(connection.request.url.includes('/login')) {
-        connection.mockRespond(new Response( new ResponseOptions({status: 200})));
-      }
-      else if(connection.request.url.includes('/role')) {
-        connection.mockRespond(new Response( new ResponseOptions({status: 200})));
-      }
-    });
-
-
-    authService.login()
-      .then((response) => {
-        expect(response).toEqual(true);
-        done();
-      });
-  });*/
-
 });
 
